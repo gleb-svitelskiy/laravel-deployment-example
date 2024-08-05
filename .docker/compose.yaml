@@ -1,0 +1,43 @@
+name: laravel-app
+
+services:
+  mysql:
+    image: mysql:9.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=laravel
+    volumes:
+      - mysql-data:/var/lib/mysql
+  redis:
+    image: redis:7.4
+  fpm:
+    build:
+      context: ..
+      dockerfile: .docker/fpm/Dockerfile
+    depends_on:
+      mysql:
+        condition: service_started
+    environment:
+      - APP_KEY=base64:mi+wa4GK6rSxBwY1o3Ba178+f8XdO6JspjKXwXN/u9w=
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - REDIS_HOST=redis
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - LOG_CHANNEL=stderr
+  nginx:
+    build:
+      context: ..
+      dockerfile: .docker/nginx/Dockerfile
+    depends_on:
+      fpm:
+        condition: service_started
+    ports:
+      - 80:80
+
+volumes:
+  mysql-data:

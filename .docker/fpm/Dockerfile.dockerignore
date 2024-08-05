@@ -1,0 +1,6 @@
+/.idea
+/.git
+/.docker
+/.kubernetes
+/vendor
+/.env
