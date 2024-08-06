@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx
+  labels:
+    app: laravel
+data:
+  default.conf: |
+    server {
+      listen 80;
+
+      root /srv/laravel-app/public;
+
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-Content-Type-Options "nosniff";
+
+      index index.php;
+
+      charset utf-8;
+
+      location / {
+        try_files $uri $uri/ /index.php?$query_string;
+      }
+
+      location = /favicon.ico { access_log off; log_not_found off; }
+      location = /robots.txt  { access_log off; log_not_found off; }
+
+      error_page 404 /index.php;
+
+      location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
+      }
+
+      location ~ /\.(?!well-known).* {
+        deny all;
+      }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel
+  labels:
+    app: laravel
+data:
+  APP_KEY: base64:mi+wa4GK6rSxBwY1o3Ba178+f8XdO6JspjKXwXN/u9w=
+  DB_CONNECTION: mysql
+  DB_HOST: mysql-0.mysql
+  DB_PORT: '3306'
+  DB_DATABASE: laravel
+  DB_USERNAME: root
+  DB_PASSWORD: password
+  REDIS_HOST: redis-0.redis
+  REDIS_PORT: '6379'
+  CACHE_STORE: redis
+  SESSION_DRIVER: redis
+  LOG_CHANNEL: stderr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: laravel
+  labels:
+    app: laravel
+spec:
+  selector:
+    app: laravel
+  ports:
+  - port: 80
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel
+  labels:
+    app: laravel
+spec:
+  selector:
+    matchLabels:
+      app: laravel
+  template:
+    metadata:
+      labels:
+        app: laravel
+    spec:
+      containers:
+      - name: fpm
+        image: glebsvitelskiy/laravel:fpm-3
+        ports:
+        - containerPort: 9000
+          name: fpm
+        envFrom:
+        - configMapRef:
+            name: laravel
+        resources:
+          limits:
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            port: 80
+            path: up
+      initContainers:
+      - name: copy-static-files
+        image: glebsvitelskiy/laravel:fpm-3
+        command: ['sh', '-c', 'cp --verbose --recursive public /mnt']
+        volumeMounts:
+        - mountPath: /mnt/public
+          name: static-files
+      - name: nginx
+        image: nginx:1.27
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: nginx-configuration
+          readOnly: true
+        - mountPath: /srv/laravel-app/public
+          name: static-files
+        restartPolicy: Always
+      os:
+        name: linux
+      volumes:
+      - name: static-files
+        emptyDir:
+          sizeLimit: 100Mi
+      - name: nginx-configuration
+        configMap:
+          name: nginx
