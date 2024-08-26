@@ -9,6 +9,11 @@ images:
 - name: glebsvitelskiy/laravel
   newTag: fpm-5
 configMapGenerator:
+- name: nginx
+  files: [ default.conf=nginx-default.conf ]
+  options:
+    labels:
+      app: laravel
 - name: laravel
   literals:
   - APP_KEY=base64:mi+wa4GK6rSxBwY1o3Ba178+f8XdO6JspjKXwXN/u9w=
@@ -23,3 +28,6 @@ configMapGenerator:
   - CACHE_STORE=redis
   - SESSION_DRIVER=redis
   - LOG_CHANNEL=stderr
+  options:
+    labels:
+      app: laravel
