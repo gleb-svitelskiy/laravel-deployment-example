@@ -36,4 +36,4 @@ For detailed setup instructions and configuration, refer to the [kubeadm README]
 ### 4. Running on Google Kubernetes Engine (GKE)
 Google Kubernetes Engine (GKE) is a managed Kubernetes service that simplifies deploying, managing, and scaling containerized applications using Kubernetes.
 
-For detailed setup and deployment instructions, refer to the GKE README.
+For detailed setup and deployment instructions, refer to the [GKE README](.kubernetes/gke/README.md).

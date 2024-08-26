@@ -56,6 +56,7 @@ multipass exec node02 -- sudo mkdir --parents --verbose /mnt/kubernetes/pv-1
   kubectl --namespace ingress-nginx describe svc ingress-nginx-controller | grep NodePort
   ```
 - Install [cert-manager](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#automated-certificate-management-with-cert-manager)
+- Install [Metrics Server](https://github.com/kubernetes-sigs/metrics-server)
 
 ## Deploy the Laravel application
 

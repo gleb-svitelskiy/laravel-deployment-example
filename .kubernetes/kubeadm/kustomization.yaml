@@ -5,9 +5,6 @@ resources:
 - mysql-deployment.yaml
 - laravel-deployment.yaml
 - ingress.yaml
-images:
-- name: glebsvitelskiy/laravel
-  newTag: fpm-1
 configMapGenerator:
 - name: nginx
   files: [ default.conf=nginx-default.conf ]
@@ -31,3 +28,6 @@ configMapGenerator:
   options:
     labels:
       app: laravel
+images:
+- name: glebsvitelskiy/laravel
+  newTag: fpm-1
