@@ -56,3 +56,37 @@ multipass exec node02 -- sudo mkdir --parents --verbose /mnt/kubernetes/pv-1
   kubectl --namespace ingress-nginx describe svc ingress-nginx-controller | grep NodePort
   ```
 - Install [cert-manager](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#automated-certificate-management-with-cert-manager)
+
+## Deploy the Laravel application
+
+Build a docker image:
+```shell
+docker buildx build \
+  --platform=linux/amd64,linux/arm64 \
+  --file=.docker/fpm/Dockerfile \
+  --tag=glebsvitelskiy/laravel:fpm-5 \
+  --push \
+  .
+```
+Apply manifests:
+```shell
+kubectl apply --kustomize=.kubernetes/kubeadm
+```
+Run DB migrations (wait for the database service to start):
+```shell
+kubectl exec \
+  $(kubectl get po --selector=app=laravel --output=jsonpath='{.items[0].metadata.name}') \
+  --container=fpm \
+  -- php artisan migrate --force
+```
+
+Now Laravel application will be accessible in your web browser at https://laravel.tableride.app
+
+Delete all resources:
+```shell
+kubectl delete --kustomize=.kubernetes/kubeadm
+```
+Diff
+```shell
+kubectl diff --kustomize=.kubernetes/kubeadm
+```
