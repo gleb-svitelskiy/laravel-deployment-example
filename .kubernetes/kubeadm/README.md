@@ -84,9 +84,9 @@ Now Laravel application will be accessible in your web browser at https://larave
 
 Delete all resources:
 ```shell
-kubectl delete -R -f .kubernetes
+kubectl delete --kustomize=.kubernetes/kubeadm
 ```
 Diff
 ```shell
-kubectl diff -R -f .kubernetes
+kubectl diff --kustomize=.kubernetes/kubeadm
 ```
