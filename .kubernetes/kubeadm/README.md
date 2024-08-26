@@ -64,13 +64,13 @@ Build a docker image:
 docker buildx build \
   --platform=linux/amd64,linux/arm64 \
   --file=.docker/fpm/Dockerfile \
-  --tag=glebsvitelskiy/laravel:fpm-3 \
+  --tag=glebsvitelskiy/laravel:fpm-5 \
   --push \
   .
 ```
 Apply manifests:
 ```shell
-kubectl apply -f .kubernetes --recursive
+kubectl apply --kustomize=.kubernetes/kubeadm
 ```
 Run DB migrations (wait for the database service to start):
 ```shell
