@@ -9,17 +9,17 @@ images:
 - name: glebsvitelskiy/laravel
   newTag: fpm-5
 configMapGenerator:
-  - name: laravel
-    literals:
-    - APP_KEY=base64:mi+wa4GK6rSxBwY1o3Ba178+f8XdO6JspjKXwXN/u9w=
-    - DB_CONNECTION=mysql
-    - DB_HOST=mysql-0.mysql
-    - DB_PORT='3306'
-    - DB_DATABASE=laravel
-    - DB_USERNAME=root
-    - DB_PASSWORD=password
-    - REDIS_HOST=redis-0.redis
-    - REDIS_PORT='6379'
-    - CACHE_STORE=redis
-    - SESSION_DRIVER=redis
-    - LOG_CHANNEL=stderr
+- name: laravel
+  literals:
+  - APP_KEY=base64:mi+wa4GK6rSxBwY1o3Ba178+f8XdO6JspjKXwXN/u9w=
+  - DB_CONNECTION=mysql
+  - DB_HOST=mysql-0.mysql
+  - DB_PORT='3306'
+  - DB_DATABASE=laravel
+  - DB_USERNAME=root
+  - DB_PASSWORD=password
+  - REDIS_HOST=redis-0.redis
+  - REDIS_PORT='6379'
+  - CACHE_STORE=redis
+  - SESSION_DRIVER=redis
+  - LOG_CHANNEL=stderr
