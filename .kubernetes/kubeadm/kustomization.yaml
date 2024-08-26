@@ -7,7 +7,7 @@ resources:
 - ingress.yaml
 images:
 - name: glebsvitelskiy/laravel
-  newTag: fpm-5
+  newTag: fpm-1
 configMapGenerator:
 - name: nginx
   files: [ default.conf=nginx-default.conf ]
