@@ -64,7 +64,7 @@ Build a docker image:
 docker buildx build \
   --platform=linux/amd64,linux/arm64 \
   --file=.docker/fpm/Dockerfile \
-  --tag=glebsvitelskiy/laravel:fpm-5 \
+  --tag=glebsvitelskiy/laravel:fpm-1 \
   --push \
   .
 ```
