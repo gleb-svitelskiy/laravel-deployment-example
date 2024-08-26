@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: fpm
-        image: glebsvitelskiy/laravel:fpm-3
+        image: glebsvitelskiy/laravel
         ports:
         - containerPort: 9000
           name: fpm
@@ -105,7 +105,7 @@ spec:
             path: up
       initContainers:
       - name: copy-static-files
-        image: glebsvitelskiy/laravel:fpm-3
+        image: glebsvitelskiy/laravel
         command: ['sh', '-c', 'cp --verbose --recursive public /mnt']
         volumeMounts:
         - mountPath: /mnt/public
