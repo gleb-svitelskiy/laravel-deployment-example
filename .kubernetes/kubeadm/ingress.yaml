@@ -3,11 +3,11 @@ kind: Ingress
 metadata:
   name: ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
   rules:
-    - host: laravel.tableride.app
+    - host: laravel.kubeadm.glib.pp.ua
       http:
         paths:
         - pathType: Prefix
@@ -19,5 +19,5 @@ spec:
                 number: 80
   tls:
     - hosts:
-        - laravel.tableride.app
+        - laravel.kubeadm.glib.pp.ua
       secretName: laravel-tls
