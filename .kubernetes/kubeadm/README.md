@@ -1,10 +1,9 @@
 ## Bootstrapping local clusters with kubeadm
 
 ### Set up DNS
-Create DNS A type record to your host public IP
+Create DNS A type record to your host public IP:
 ```shell
-glib@mbp ~ % dig +short laravel.tableride.app
-178.158.198.10
+dig laravel.kubeadm.glib.pp.ua +short
 ```
 
 ### Set up virtual machines
@@ -17,18 +16,21 @@ multipass launch --cpus 2 --disk 9G --memory 2G --name node02 \
 multipass launch --cpus 2 --disk 9G --memory 2G --name node03 \
   --network name=en0,mode=auto,mac="52:54:00:d5:31:7a"
 ```
+
 Change `route-metric` to 50 for `extra0` network interface on each VM:
 ```shell
 multipass shell node01
 sudo vim /etc/netplan/50-cloud-init.yaml
 multipass restart --all
 ```
+
 Verify routing
 ```shell
 multipass exec node01 -- ip route | grep default
 multipass exec node02 -- ip route | grep default
 multipass exec node03 -- ip route | grep default
 ```
+
 Create directory for local volumes
 ```shell
 multipass exec node02 -- sudo mkdir --parents --verbose /mnt/kubernetes/pv-1
@@ -56,6 +58,7 @@ multipass exec node02 -- sudo mkdir --parents --verbose /mnt/kubernetes/pv-1
   kubectl --namespace ingress-nginx describe svc ingress-nginx-controller | grep NodePort
   ```
 - Install [cert-manager](https://kubernetes.github.io/ingress-nginx/user-guide/tls/#automated-certificate-management-with-cert-manager)
+- Install [Metrics Server](https://github.com/kubernetes-sigs/metrics-server)
 
 ## Deploy the Laravel application
 
@@ -80,7 +83,7 @@ kubectl exec \
   -- php artisan migrate --force
 ```
 
-Now Laravel application will be accessible in your web browser at https://laravel.tableride.app
+Now Laravel application will be accessible in your web browser at https://laravel.kubeadm.glib.pp.ua
 
 Delete all resources:
 ```shell

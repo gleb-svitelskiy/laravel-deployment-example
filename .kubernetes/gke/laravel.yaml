@@ -36,9 +36,10 @@ spec:
         - configMapRef:
             name: laravel
         resources:
-          limits:
-            cpu: 500m
-            memory: 256Mi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 128Mi
         readinessProbe:
           httpGet:
             port: 80
@@ -50,6 +51,11 @@ spec:
         volumeMounts:
         - mountPath: /mnt/public
           name: static-files
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 128Mi
       - name: nginx
         image: nginx:1.27
         ports:
@@ -61,13 +67,18 @@ spec:
           readOnly: true
         - mountPath: /srv/laravel-app/public
           name: static-files
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 128Mi
         restartPolicy: Always
       os:
         name: linux
       volumes:
       - name: static-files
         emptyDir:
-          sizeLimit: 100Mi
+          sizeLimit: 128Mi
       - name: nginx-configuration
         configMap:
           name: nginx
