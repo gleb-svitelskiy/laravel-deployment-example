@@ -3,7 +3,7 @@
 ### Set up DNS
 Create DNS A type record to your host public IP:
 ```shell
-dig laravel.kubeadm.glib.pp.ua +short
+dig laravel.kubeadm.any-key.dev +short
 ```
 
 ### Set up virtual machines
@@ -83,7 +83,7 @@ kubectl exec \
   -- php artisan migrate --force
 ```
 
-Now Laravel application will be accessible in your web browser at https://laravel.kubeadm.glib.pp.ua
+Now Laravel application will be accessible in your web browser at https://laravel.kubeadm.any-key.dev
 
 Delete all resources:
 ```shell
