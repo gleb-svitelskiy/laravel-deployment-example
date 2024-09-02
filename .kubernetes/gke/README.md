@@ -20,7 +20,7 @@ Create DNS A type record to `kubernetes-ingress-ip`:
 gcloud compute addresses list
 ```
 ```shell
-dig laravel.gke.glib.pp.ua +short
+dig laravel.gke.any-key.dev +short
 ```
 
 ### Certificate Manager API
@@ -58,7 +58,7 @@ kubectl exec \
   -- php artisan migrate --force
 ```
 
-Now Laravel application will be accessible in your web browser at https://laravel.gke.glib.pp.ua
+Now Laravel application will be accessible in your web browser at https://laravel.gke.any-key.dev
 
 Delete all resources:
 ```shell
